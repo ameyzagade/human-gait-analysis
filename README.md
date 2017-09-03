@@ -2,11 +2,9 @@
 
 	Group No.: 29
 
-Project Title: Human Gait Analysis
+	Project Title: Human Gait Analysis
 
-Project Guide:
+	Project Guide: Priti R
 
-Group Members: Damini Tembhurne, Gaurav Shetty,	Amey Zagade
-
-GitHub repo: https://github.com/ameyzagade/human-gait-analysis.git
+	Group Members: Damini Tembhurne, Gaurav Shetty,	Amey Zagade
 
