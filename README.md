@@ -1,10 +1,4 @@
-# human-gait-analysis
+# MATLAB codes/calc_GEI.m
 
-	Group No.: 29
-
-	Project Title: Human Gait Analysis
-
-	Project Guide: Priti R
-
-	Group Members: Damini Tembhurne, Gaurav Shetty,	Amey Zagade
-
+creates a GEI from frames extracted from gait energy cycle
+and stores it in the same directory
