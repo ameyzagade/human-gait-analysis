@@ -6,7 +6,7 @@ columns = 352;
 
 % navigate to the directory containing processed silhouettes
 % edit the base file name as per your requirements 
-base_file_name = 'test_';
+base_file_name = '';
 extension = '.png';
 
 % initialize an empty matrix to store GEI
