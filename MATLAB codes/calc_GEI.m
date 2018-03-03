@@ -1,12 +1,15 @@
-% input image format: img_proc_subjectno_imageno.png
+% input image format: img_proc_subjectsubjectno_imageno.png
 % output image format: extracted_gei_subjectno.png
+% input image dimension: variable sizes for each image
+% output image dimension: unknown
 
 close all;
+pkg load image;
 
 
-% rows and columns of matrix
-row = 240;
-col = 352;
+% width and height of the image
+img_size_X = ;
+img_size_Y = ;
 
 
 
@@ -20,28 +23,28 @@ dirFlag = [files.isdir];
 subDirs = files (dirFlag);
 
 % remove . and ..
-subDirs (ismember( {subDirs.name}, {'.', '..'} )) = [];
+subDirs (ismember ( {subDirs.name}, {'.', '..'} )) = [];
 
-len_subdirs = length(subDirs);
+len_subdirs = length (subDirs);
 
 
 
 % visit all the directories containing silhouettes
 for counter = 1 : len_subdirs
-
+ 
 	% enter directory
   	cd (subDirs(counter).name);
 
   
   	% image path
   	base_name = 'img_proc_';
-  	subject = strcat('subject', int2str(counter));
+  	subject = strcat ('subject', int2str(counter));
   	ext = '.png';
 
   
   	% initialize an empty matrix to store GEI
-  	gait_energy_mat = zeros (row, col);
-
+  	gait_energy_mat = zeros (img_size_X, img_size_Y);
+	
   
   	% count total images in the directory
   	img_list = dir ('*.png');
@@ -50,12 +53,13 @@ for counter = 1 : len_subdirs
   
   	% calculate GEI
   	for count = 1 : img_count
-   		img_name = strcat (base_name, subject, '_', int2str (count), ext);
+    	img_name = strcat (base_name, subject, '_', int2str (count), ext);
     	img = imread (img_name);
   
   
     	% summation of each frame in the gait cycle
     	gait_energy_mat = gait_energy_mat + img;
+    
   	end
 
   
@@ -67,14 +71,14 @@ for counter = 1 : len_subdirs
 
   
   	% write image to the same directory
-  	file_name = strcat('extracted_gei_', subject);
-  	imwrite(gait_energy_mat, file_name, 'PNG');
+  	file_name = strcat ('extracted_gei_', subject);
+  	imwrite (gait_energy_mat, file_name, 'PNG');
   
   
   	% exit directory
   	cd ../;
+  
 end
 
 
 clear;
-
