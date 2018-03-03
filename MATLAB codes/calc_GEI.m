@@ -1,36 +1,80 @@
-% close all windows
+% input image format: img_proc_subjectno_imageno.png
+% output image format: 'extracted_gei_subjectno.png
+
 close all;
 
+
 % rows and columns of matrix
-% change as per required
 row = 240;
 col = 352;
 
+
+
 % navigate to the directory containing processed silhouettes
-base_file_name = 'img_proc_';
-subject = 'subject1';
-ext = '.png';
+files = dir (pwd);
 
-% initialize an empty matrix to store GEI
-gait_energy_mat = zeros (row, col);
+% identify a directory using logical vector
+dirFlag = [files.isdir];
 
-% count total images in the directory
-file_list = dir ('*.png');
-img_count = length (file_list);
+% fetch only directories
+subDirs = files (dirFlag);
 
-for count = 1: img_count
-  img_name = strcat (base_file_name, subject, '_', int2str (count), ext);
-  img = imread (img_name);
+% remove . and ..
+subDirs (ismember( {subDirs.name}, {'.', '..'} )) = [];
+
+len_subdirs = length(subDirs);
+
+
+
+% visit all the directories containing silhouettes
+for counter = 1 : len_subdirs
+
+	% enter directory
+  	cd (subDirs(counter).name);
+
   
-  % summation of each frame in the gait cycle
-  gait_energy_mat = gait_energy_mat + img;
+  	% image path
+  	base_name = 'img_proc_';
+  	subject = strcat('subject', int2str(counter));
+  	ext = '.png';
+
+  
+  	% initialize an empty matrix to store GEI
+  	gait_energy_mat = zeros (row, col);
+
+  
+  	% count total images in the directory
+  	img_list = dir ('*.png');
+  	img_count = length (img_list);
+
+  
+  	% calculate GEI
+  	for count = 1 : img_count
+   		img_name = strcat (base_name, subject, '_', int2str (count), ext);
+    	img = imread (img_name);
+  
+  
+    	% summation of each frame in the gait cycle
+    	gait_energy_mat = gait_energy_mat + img;
+  	end
+
+  
+  	multiply_factor = 1 / img_count;
+
+  
+  	% multiply the factor 1/N to get the gait energy image
+  	gait_energy_mat = multiply_factor .* gait_energy_mat;
+
+  
+  	% write image to the same directory
+  	file_name = strcat('extracted_gei_', subject);
+  	imwrite(gait_energy_mat, file_name, 'PNG');
+  
+  
+  	% exit directory
+  	cd ../;
 end
 
-multiply_factor = 1 / total_files;
 
-% multiply the factor 1/N to get the gait energy image
-gait_energy_mat = multiply_factor .* gait_energy_mat;
+clear;
 
-% write image to the same directory
-file_name = strcat('extracted_gei', subject);
-imwrite(gait_energy_mat, file_name, 'PNG');
