@@ -1,34 +1,36 @@
+% close all windows
 close all;
 
+% rows and columns of matrix
 % change as per required
-rows = 240;
-columns = 352;
+row = 240;
+col = 352;
 
 % navigate to the directory containing processed silhouettes
-% edit the base file name as per your requirements 
-base_file_name = '';
-extension = '.png';
+base_file_name = 'img_proc_';
+subject = 'subject1';
+ext = '.png';
 
 % initialize an empty matrix to store GEI
-gait_energy_mat = zeros(rows, columns);
+gait_energy_mat = zeros (row, col);
 
 % count total images in the directory
-[files, err, msg] = readdir (pwd);
-total_files = length (files) - 2;
+file_list = dir ('*.png');
+img_count = length (file_list);
 
-factor = 1 / total_files;
-
-for file_no = 1: total_files
-  image_name = strcat (base_file_name, int2str (file_no), extension);
-  image = imread(image_name);
+for count = 1: img_count
+  img_name = strcat (base_file_name, subject, '_', int2str (count), ext);
+  img = imread (img_name);
   
   % summation of each frame in the gait cycle
-  gait_energy_mat = gait_energy_mat + image;
+  gait_energy_mat = gait_energy_mat + img;
 end
 
+multiply_factor = 1 / total_files;
+
 % multiply the factor 1/N to get the gait energy image
-gait_energy_mat = times(factor, gait_energy_mat);
+gait_energy_mat = multiply_factor .* gait_energy_mat;
 
 % write image to the same directory
-file_name = strcat(base_file_name, '_', 'extracted_gei');
+file_name = strcat('extracted_gei', subject);
 imwrite(gait_energy_mat, file_name, 'PNG');
