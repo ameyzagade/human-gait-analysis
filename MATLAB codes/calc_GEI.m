@@ -1,7 +1,12 @@
+<<<<<<< HEAD
 % input image format: img_proc_subjectsubjectno_imageno.png
 % output image format: extracted_gei_subjectno.png
 % input image dimension: variable sizes for each image
 % output image dimension: unknown
+=======
+% input image format: img_proc_subjectno_imageno.png
+% output image format: extracted_gei_subjectno.png
+>>>>>>> dc848948a4be0ab8e78c78235ccbb3e597e47fc7
 
 close all;
 pkg load image;
