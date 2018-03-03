@@ -1,5 +1,5 @@
 % input image format: img_proc_subjectno_imageno.png
-% output image format: 'extracted_gei_subjectno.png
+% output image format: extracted_gei_subjectno.png
 
 close all;
 
