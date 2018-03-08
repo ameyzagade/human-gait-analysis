@@ -4,19 +4,20 @@ def main():
     import numpy as num
     import cv2
     import os
+    import shutil
 
 
     # input directory
     input_dir = 'videos'
 
-    # get the count of mp4 files
-    files = filter(lambda x: x.endswith('.mp4'), os.listdir(input_dir))
-    count = len(files)
+    # get the names of mp4 files
+    files = [x for x in os.listdir(input_dir) if x.endswith('.mp4')]
 
 
     # output directory
     output_dir = 'frames'
-
+    if os.path.exists(output_dir):
+        shutil.rmtree(output_dir)
     # create output directory
     os.mkdir(output_dir)
 
@@ -25,12 +26,14 @@ def main():
     for vid_file in files:
         # path to the video file
         vid_path = os.path.join(input_dir, vid_file)
+      
 
         # get video
         video = cv2.VideoCapture(vid_path)
 
         # get basename of the video file without file extension
         vid_name = os.path.splitext(vid_file)[0]
+
 
         basename = vid_name
         ext = '.png'
@@ -40,12 +43,13 @@ def main():
         os.mkdir(output_dir_vid)
 
         image_no = 1
-
+        print(video.isOpened())
         while (video.isOpened()):
             # grab frame in the video
             # and the return value if grabbed
             ret_val, frame = video.read()
-
+            print('#')
+            print(ret_val)
             # check whether end of video is reached or not
             # and if reached, break out of the loop
             if (ret_val):
