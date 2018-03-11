@@ -2,17 +2,18 @@
 # input: video file
 # ouput: frames captured from the videos
 
-def main():
-    import numpy as num
-    import cv2
-    import os
-    import shutil
+import numpy as num
+import cv2
+import os
+import shutil
 
+def main():
     # input directory
     input_dir = 'videos'
 
     # get the names of mp4 files
     files = [x for x in os.listdir(input_dir) if x.endswith('.mp4')]
+    files.sort()
 
     # output directory
     output_dir = 'frames'
@@ -24,6 +25,7 @@ def main():
     
     # iterate through all the video files
     for vid_file in files:
+
         # path to the video file
         vid_path = os.path.join(input_dir, vid_file)
 
@@ -34,7 +36,7 @@ def main():
         vid_name = os.path.splitext(vid_file)[0]
 
         basename = vid_name
-        ext = '.png'
+        ext = '.jpeg'
 
         # set output directory for each video
         output_dir_vid = os.path.join(output_dir, basename)
@@ -57,7 +59,7 @@ def main():
                 output_path = os.path.join(output_dir_vid, filename)
             
                 # write it to the output location
-                cv2.imwrite (output_path, frame)
+                cv2.imwrite(output_path, frame)
 
                 image_no += 1
 
