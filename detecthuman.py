@@ -1,6 +1,7 @@
-#
-#
-#
+# Extract object from extracted frames
+# input: captured frames for each subject
+# output: silhouettes
+# Thanks to TheSalarKhan for his background subtractor algorithm
 
 import numpy as np
 import cv2
@@ -13,15 +14,15 @@ def denoise(frame):
 
 	# kernel size
 	# should be an odd positive integer
-	median_kernel_size = 5
+	median_kernel_size = 3
 
 	# apply median blur
 	frame = cv2.medianBlur(frame, median_kernel_size)
 
 	# height and width of the gaussian kernel
 	# should be an odd positive integer
-	gauss_blur_height = 5
-	gauss_blur_width = 5
+	gauss_blur_height = 3
+	gauss_blur_width = 3
 
 	# standard deviation in X and Y direction
 	sigma_x = 0
@@ -37,6 +38,7 @@ def main():
 
     # input directory
     input_dir = 'frames'
+
     if not input_dir:
     	raise Exception('No such input directory!')
 
@@ -46,6 +48,7 @@ def main():
 
     # output directory
     output_dir = 'silhouettes'
+    
     if os.path.exists(output_dir):
     	print(output_dir, 'directory exists!\nReplacing the contents!')
     	shutil.rmtree(output_dir)
@@ -56,7 +59,7 @@ def main():
     # rate at which the algorithm is going to learn
     # value should be between 0 and 1
     # increase value if the environment is moving quickly
-    ALPHA = 0.009
+    ALPHA = 0.02
 
     # path to the first image
     image_path = os.path.join(input_dir, files[0])

@@ -7,10 +7,14 @@ import cv2
 import os
 import shutil
 
+
 def main():
 
     # input directory
     input_dir = 'videos'
+
+    if not input_dir:
+    	raise Exception('No such input directory!')
 
     # get the names of mp4 files
     files = [x for x in os.listdir(input_dir) if x.endswith(('.mp4', '.MOV'))]
@@ -19,7 +23,8 @@ def main():
     # output directory
     output_dir = 'frames'
     if os.path.exists(output_dir):
-        shutil.rmtree(output_dir)
+    	print(output_dir, 'directory exists!\nReplacing the contents!')
+    	shutil.rmtree(output_dir)
 
     # create output directory
     os.mkdir(output_dir)
@@ -41,6 +46,7 @@ def main():
 
         # set output directory for each video
         output_dir_vid = os.path.join(output_dir, basename)
+
         os.mkdir(output_dir_vid)
 
         image_no = 1
