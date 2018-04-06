@@ -16,7 +16,7 @@ def denoise(frame):
 	# should be an odd positive integer
 	median_kernel_size = 3
 
-	# apply median blur
+	# median apply median blur
 	frame = cv2.medianBlur(frame, median_kernel_size)
 
 	# height and width of the gaussian kernel
@@ -24,12 +24,11 @@ def denoise(frame):
 	gauss_blur_height = 3
 	gauss_blur_width = 3
 
-	# standard deviation in X and Y direction
-	sigma_x = 0
-	sigma_y = 0
+	# gaussian kernel size
+	gauss_kernel = 0
 
 	# apply gaussian blur
-	frame = cv2.GaussianBlur(frame, (gauss_blur_height, gauss_blur_width), sigma_x, sigma_y)
+	frame = cv2.GaussianBlur(frame, (gauss_blur_height, gauss_blur_width), gauss_kernel)
 
 	return frame
 
@@ -105,3 +104,34 @@ def main():
 
 if __name__ == "__main__":
 	main()
+
+
+#!/usr/bin/env python2
+# # -*- coding: utf-8 -*-
+# """
+# Created on Mon Jun 19 14:29:58 2017
+# Basic background subtractor
+# Issue is python cv2 has limited parameters (no alpha) so limited ability to track
+# people standing still
+# """
+
+# import cv2
+
+# class mog_bkg_subtractor:
+#     def __init__(self, erode=5, dialate=8, kernel_size=3):
+#         self.kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(kernel_size,kernel_size))
+#         self.erode = erode
+#         self.dialate = dialate
+#         self.fgbg = cv2.createBackgroundSubtractorMOG2(history=1000)
+
+#     def process_frame(self, frame):
+#         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+#         frame = self.fgbg.apply(frame)
+#         frame = self.erode_dialate(frame) 
+#         return( frame )       
+   
+#     def erode_dialate(self, frame):
+#         frame = cv2.morphologyEx(frame, cv2.MORPH_OPEN, self.kernel) 
+#         frame = cv2.erode(frame, self.kernel,iterations = self.erode)
+#         frame = cv2.dilate(frame, self.kernel, iterations = self.dialate)
+#         return(frame)

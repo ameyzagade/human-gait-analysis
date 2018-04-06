@@ -1,5 +1,4 @@
 # apply erosion, dilation, opening and closing operations
-
 import numpy as np
 import cv2
 import os
@@ -9,8 +8,8 @@ import shutil
 def erosion(frame):
 
 	# kernel size
-	kernel_height = 5
-	kernel_width = 5
+	kernel_height = 2
+	kernel_width = 2
 
 	# number of iterations
 	iterations = 1
@@ -27,8 +26,8 @@ def erosion(frame):
 def dilation(frame):
 
 	# kernel size
-	kernel_height = 5
-	kernel_width = 5
+	kernel_height = 2
+	kernel_width = 2
 
 	# number of iterations
 	iterations = 1
@@ -60,8 +59,8 @@ def opening(frame):
 def closing(frame):
 
 	# kernel size
-	kernel_height = 5
-	kernel_width = 5
+	kernel_height = 1
+	kernel_width = 1
 
 	# set kernel
 	kernel = np.ones((kernel_height, kernel_width), np.uint8)
@@ -73,15 +72,15 @@ def closing(frame):
 
 
 def main():
+
 	# input directory
     input_dir = 'silhouettes'
 
-    if not input_dir:
+    if os.path.exists(input_dir):
     	raise Exception('No such input directory!')
 
-    # get the names of jpeg files
-    files = [x for x in os.listdir(input_dir) if x.endswith('.jpeg')]
-    files.sort()
+   	# get all the directories
+    dirs = [x for x in os.listdir(input_dir) if not os.path.isfile(x)]
 
     # output directory
     output_dir = 'processed'
@@ -93,25 +92,36 @@ def main():
     # create output directory
     os.mkdir(output_dir)
 
-    # get the names of jpeg files
-    files = [x for x in os.listdir(input_dir) if x.endswith('.jpeg')]
-    files.sort()
+    for i in dirs:
+    	# set the path of subdirectory
+    	sub_dir = os.path.join(input_dir, i)
 
-    for i in files:
+    	# set the path of output subdirectory
+    	target = os.path.join(output_dir, i)
 
-    	# path to the image
-        image_path = os.path.join(input_dir, i)
+    	# create output subdirectory
+    	os.mkdir(target)
 
-        image = cv2.imread(image_path)
-		
-		# opening
-        image = opening(image)
+    	# fetch all the PNG files
+    	files = [x for x in os.listdir(sub_dir) if x.endswith('.png')]
+    	files.sort()
 
-        # closing
-        image = closing(image)
+    	for j in files:
 
-        output_path = os.path.join(output_dir, i)
-        cv2.imwrite(output_path, image)
+    		# path to the image
+        	image_path = os.path.join(sub_dir, j)
+
+        	image = cv2.imread(image_path)
+
+			# opening
+        	image = opening(image)
+
+       	 	# closing
+        	image = closing(image)
+
+        	output_path = os.path.join(target, j)
+        	cv2.imwrite(output_path, image)
 
 if __name__ == "__main__":
 	main()
+
