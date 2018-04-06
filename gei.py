@@ -2,6 +2,54 @@ import numpy as np
 import cv2
 import os
 import shutil
+import math
+
+
+def filter(image, path):
+
+	# get height and width
+	height, width = image.shape
+
+	# get midpoint
+	midpoint = math.ceil(height / 2)
+
+	# only consider upper portion of the subject
+	temp = image[0:midpoint, :]
+
+	cv2.imwrite(path, temp)
+
+	temp = cv2.imread(path, 0)
+
+	# perform dilation
+
+	# kernel size
+	kernel_height = 3
+	kernel_width = 3
+
+	# number of iterations
+	iterations = 1
+	
+	# set kernel
+	kernel = np.ones((kernel_height, kernel_width), np.uint8)
+
+	# perform dilation
+	temp  = cv2.dilate(temp, kernel, iterations)
+
+	# apply median blur
+
+	# kernel size of median blur filter
+	kernel_size = 13
+
+	# apply median blur
+	temp = cv2.medianBlur(temp, kernel_size)
+
+	# combine processed part with original image
+	image[0:midpoint, :] = temp[:,:]
+
+	os.remove(path)
+
+	return image
+
 
 
 def main():
@@ -86,6 +134,8 @@ def main():
 		# output path of image
 		destination_path = os.path.join(output_dir, name)
 
+		gait_energy = filter(gait_energy, destination_path)
+
 		# write image
 		cv2.imwrite(destination_path, gait_energy)
 
@@ -96,7 +146,7 @@ def main():
 		gait_energy = cv2.imread(destination_path, 0)
 
 		# kernel size of median blur filter
-		kernel_size = 9
+		kernel_size = 3
 
 		# apply median blur
 		gait_energy = cv2.medianBlur(gait_energy, kernel_size)
